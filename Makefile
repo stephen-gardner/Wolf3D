@@ -11,6 +11,8 @@ INC = -I inc -I libft/inc
 LIBFT = libft/libft.a
 SRC_DIR = src
 SRC = \
+	load\
+	util\
 	wolf3d
 OBJ_DIR = $(SRC_DIR)/obj
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
