@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 19:44:47 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/03 01:13:58 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/03 03:08:54 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@
 
 typedef struct	s_map
 {
-	int			*data;
-	int			width;
-	int			height;
+	int			**arr;
+	int			*raw;
+	int			x_max;
+	int			y_max;
 }				t_map;
 
 /*

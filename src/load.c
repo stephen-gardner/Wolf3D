@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 21:15:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/03 01:40:22 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/03 03:21:37 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,20 @@ static int	map_atoi(char *str)
 	return ((int)n);
 }
 
-static void	load_data(t_map *map, char *line, int height)
+static void	load_data(t_map *map, char *line, int y)
 {
 	char	**arr;
-	int		pos;
-	int		i;
+	int		x;
 
-	i = 0;
+	x = 0;
 	arr = split(line);
-	pos = height * map->width;
-	while (arr[i])
+	map->arr[y] = &map->raw[y * map->x_max];
+	while (x < map->x_max && arr[x])
 	{
-		if (i == map->width)
-			break ;
-		map->data[pos + i] = map_atoi(arr[i]);
-		++i;
+		map->arr[y][x] = map_atoi(arr[x]);
+		++x;
 	}
-	if (i != map->width || arr[i])
+	if (x != map->x_max || arr[x])
 		MAP_ERROR;
 	free(arr);
 }
@@ -72,12 +69,12 @@ static void	read_key(t_map *map, int fd)
 	}
 	i = 0;
 	while (key[i] && IS_DIGIT(key[i]))
-		BUILD_NUM(map->width, key[i++]);
-	if (!map->width || key[i++] != 'x')
+		BUILD_NUM(map->x_max, key[i++]);
+	if (!map->x_max || key[i++] != 'x')
 		MAP_ERROR;
 	while (key[i] && IS_DIGIT(key[i]))
-		BUILD_NUM(map->height, key[i++]);
-	if (!map->height || key[i] != '\n')
+		BUILD_NUM(map->y_max, key[i++]);
+	if (!map->y_max || key[i] != '\n')
 		MAP_ERROR;
 }
 
@@ -85,27 +82,26 @@ t_map		*load_map(char *path)
 {
 	t_map	*map;
 	char	*line;
-	int		height;
 	int		bytes;
 	int		fd;
+	int		y;
 
 	if (!(map = ft_memalloc(sizeof(t_map))))
 		DEFAULT_ERROR;
 	if ((fd = open(path, O_RDONLY)) < 0)
 		DEFAULT_ERROR;
 	read_key(map, fd);
-	if (!(map->data = ft_memalloc(sizeof(int) * (map->width * map->height))))
+	if (!(map->raw = ft_memalloc(sizeof(int) * (map->x_max * map->y_max)))
+		|| !(map->arr = ft_memalloc(sizeof(int *) * map->y_max)))
 		DEFAULT_ERROR;
-	height = 0;
+	y = 0;
 	while ((bytes = get_next_line(fd, &line)) > 0)
 	{
-		load_data(map, line, height++);
+		load_data(map, line, y++);
 		free(line);
 	}
 	close(fd);
-	if (bytes < 0)
-		DEFAULT_ERROR;
-	if (height != map->height)
+	if (y != map->y_max)
 		MAP_ERROR;
 	return (map);
 }
