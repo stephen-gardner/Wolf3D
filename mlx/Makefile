@@ -4,18 +4,18 @@
 # SETTINGS                                                                     #
 ################################################################################
 
-NAME = wolf3d
+NAME = libmlx.a
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
-FRAMEWORK = -framework OpenGL -framework AppKit
-INC = -I inc -I libft/inc -I mlx/inc
-LIBFT = libft/libft.a
-MLX = mlx/libmlx.a
+CFLAGS = -O2
+INC = -I inc
 SRC_DIR = src
 SRC = \
-	load\
-	util\
-	wolf3d
+	mlx_init_loop\
+	mlx_int_str_to_wordtab\
+	mlx_new_image\
+	mlx_new_window\
+	mlx_shaders\
+	mlx_xpm
 OBJ_DIR = $(SRC_DIR)/obj
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 
@@ -26,7 +26,6 @@ OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 NC = \033[0m
 GREEN = \033[1;32m
 RED = \033[1;31m
-YELLOW = \033[1;33m
 
 ################################################################################
 # RULES                                                                        #
@@ -34,34 +33,23 @@ YELLOW = \033[1;33m
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(MLX) $(OBJ)
-	@printf "$(YELLOW)%-35s$(NC)" "Building $@... "
-	@$(CC) $(CFLAGS) $(LIBFT) $(MLX) $(OBJ) $(FRAMEWORK) -o $@
+$(NAME): $(OBJ)
+	@ar -rcs $@ $(OBJ)
 	@echo "$(GREEN)DONE$(NC)"
-
-$(LIBFT):
-	@printf "$(YELLOW)%-35s$(NC)" "Building $@... "
-	@make -C libft
-
-$(MLX):
-	@printf "$(YELLOW)%-35s$(NC)" "Building $@... "
-	@make -C mlx
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	@echo " > Compiling $<..."
+	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.m
+	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@make -C libft clean
-	@make -C mlx clean
-	@echo "$(RED)Object files removed$(NC)"
 
 fclean: clean
-	@make -C libft fclean
-	@make -C mlx fclean
 	@rm -f $(NAME)
-	@echo "$(RED)$(NAME) removed"
+	@echo "$(RED)$(NAME) removed$(NC)"
 
 re: fclean all
