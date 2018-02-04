@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 21:15:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/03 03:21:37 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/04 00:13:55 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ t_map		*load_map(char *path)
 		DEFAULT_ERROR;
 	read_key(map, fd);
 	if (!(map->raw = ft_memalloc(sizeof(int) * (map->x_max * map->y_max)))
+		|| !(map->canvas = ft_memalloc(sizeof(t_canvas)))
 		|| !(map->arr = ft_memalloc(sizeof(int *) * map->y_max)))
 		DEFAULT_ERROR;
 	y = 0;

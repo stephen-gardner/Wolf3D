@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 19:44:47 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/03 03:08:54 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/04 00:26:31 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,22 @@
 # define DEFAULT_ERROR FATAL_ERROR(strerror(errno))
 # define MAP_ERROR FATAL_ERROR("Map error\n")
 
+typedef struct	s_canvas
+{
+	void		*mlx;
+	void		*win;
+	void		*img;
+	int			*data;
+	int			height;
+	int			width;
+	int			bpp;
+	int			line_size;
+	int			endian;
+}				t_canvas;
+
 typedef struct	s_map
 {
+	t_canvas	*canvas;
 	int			**arr;
 	int			*raw;
 	int			x_max;
