@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 19:44:47 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/12 09:01:19 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/12 09:23:49 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ typedef enum	e_keys
 	K_UP = 126
 }				t_keys;
 
+typedef enum	e_face
+{
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST
+}				t_face;
+
 typedef struct	s_raycast
 {
 	int			x;
@@ -47,6 +55,7 @@ typedef struct	s_raycast
 	int			color;
 	int			map_x;
 	int			map_y;
+	int			face;
 	double		rdir_x;
 	double		rdir_y;
 	double		dist_dx;
@@ -116,5 +125,6 @@ void			raycast(t_map *map);
 */
 
 void			fatal_error(char *msg);
+int				get_color(t_raycast *rc, int y);
 char			**split(char *arg);
 #endif

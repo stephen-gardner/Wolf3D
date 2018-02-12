@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 16:23:24 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/12 08:37:30 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/12 09:24:40 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ static void	draw_vert(t_map *map, t_raycast *rc)
 	if (y < y_start && y < y_end)
 		*(cvs->data + (cvs->x_max * y++) + x) = 0;
 	while (y < y_end - 1)
-		*(cvs->data + (cvs->x_max * y++) + x) = rc->color;
+	{
+		*(cvs->data + (cvs->x_max * y) + x) = get_color(rc, y);
+		++y;
+	}
 	if (y < cvs->y_max - 1)
 		*(cvs->data + (cvs->x_max * y++) + x) = 0;
 	while (y < cvs->y_max - 1)
@@ -125,9 +128,9 @@ void		raycast(t_map *map)
 		rc.side = find_wall(map, &rc, step_x, step_y);
 		calc_wallpoints(map, &rc, step_x, step_y);
 		if (rc.side)
-			rc.color = (rc.rdir_y > 0) ? 0xFF0000 : 0x00FF00;
+			rc.face = (rc.rdir_y > 0) ? NORTH : SOUTH;
 		else
-			rc.color = (rc.rdir_x > 0) ? 0x0000FF : 0xFFFF00;
+			rc.face = (rc.rdir_x > 0) ? EAST : WEST;
 		draw_vert(map, &rc);
 		++rc.x;
 	}
