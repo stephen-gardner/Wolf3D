@@ -6,7 +6,7 @@
 
 NAME = wolf3d
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -O3 -funroll-loops -march=native -pipe
 FRAMEWORK = -framework OpenGL -framework AppKit
 INC = -I inc -I libft/inc -I mlx/inc
 LIBFT = libft/libft.a
@@ -14,6 +14,8 @@ MLX = mlx/libmlx.a
 SRC_DIR = src
 SRC = \
 	load\
+	movement\
+	raycast\
 	util\
 	wolf3d
 OBJ_DIR = $(SRC_DIR)/obj

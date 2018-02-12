@@ -6,7 +6,7 @@
 
 NAME = libft.a
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -O3 -funroll-loops -march=native -pipe
 INC = -I inc
 SRC_DIR = src
 SRC = \

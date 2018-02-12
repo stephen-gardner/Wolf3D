@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 22:18:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/03 00:54:00 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/12 08:41:49 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 void		fatal_error(char *msg)
 {
 	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
 	exit(1);
 }
 

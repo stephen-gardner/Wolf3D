@@ -6,7 +6,7 @@
 
 NAME = libmlx.a
 CC = gcc
-CFLAGS = -O2
+CFLAGS = -O3 -funroll-loops -march=native -pipe
 INC = -I inc
 SRC_DIR = src
 SRC = \

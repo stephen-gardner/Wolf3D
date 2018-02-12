@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 21:15:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/04 00:13:55 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/12 07:32:02 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,26 @@
 #define IS_DIGIT(x) ((unsigned int)(x - '0') < 9)
 #define BUILD_NUM(x, y) (x = (x * 10) + (y - '0'))
 
+static void	force_border(t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (i < map->x_max)
+	{
+		map->arr[0][i] = 1;
+		map->arr[map->y_max - 1][i] = 1;
+		i++;
+	}
+	i = 0;
+	while (i < map->y_max)
+	{
+		map->arr[i][0] = 1;
+		map->arr[i][map->x_max - 1] = 1;
+		i++;
+	}
+}
+
 static int	map_atoi(char *str)
 {
 	long	n;
@@ -29,6 +49,8 @@ static int	map_atoi(char *str)
 		DEFAULT_ERROR;
 	while (*str)
 	{
+		if (*str == 'S')
+			return (-1);
 		if (!IS_DIGIT(*str) || BUILD_NUM(n, *str++) > INT_MAX)
 			MAP_ERROR;
 	}
@@ -45,12 +67,18 @@ static void	load_data(t_map *map, char *line, int y)
 	map->arr[y] = &map->raw[y * map->x_max];
 	while (x < map->x_max && arr[x])
 	{
-		map->arr[y][x] = map_atoi(arr[x]);
+		if ((map->arr[y][x] = map_atoi(arr[x])) < 0)
+		{
+			map->arr[y][x] = 0;
+			map->pos->loc_x = x;
+			map->pos->loc_y = y;
+		}
 		++x;
 	}
 	if (x != map->x_max || arr[x])
 		MAP_ERROR;
 	free(arr);
+	free(line);
 }
 
 static void	read_key(t_map *map, int fd)
@@ -92,17 +120,16 @@ t_map		*load_map(char *path)
 		DEFAULT_ERROR;
 	read_key(map, fd);
 	if (!(map->raw = ft_memalloc(sizeof(int) * (map->x_max * map->y_max)))
-		|| !(map->canvas = ft_memalloc(sizeof(t_canvas)))
+		|| !(map->cvs = ft_memalloc(sizeof(t_canvas)))
+		|| !(map->pos = ft_memalloc(sizeof(t_pos)))
 		|| !(map->arr = ft_memalloc(sizeof(int *) * map->y_max)))
 		DEFAULT_ERROR;
 	y = 0;
 	while ((bytes = get_next_line(fd, &line)) > 0)
-	{
 		load_data(map, line, y++);
-		free(line);
-	}
 	close(fd);
 	if (y != map->y_max)
 		MAP_ERROR;
+	force_border(map);
 	return (map);
 }
