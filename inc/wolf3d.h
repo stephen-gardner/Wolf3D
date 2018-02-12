@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 19:44:47 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/12 08:41:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/12 09:01:19 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <math.h>
 # include "libft.h"
 
+# define ROT 0.0225
+# define MOV 0.0375
 # define CEIL_COLOR 0xE5E5FF;
 # define GRND_COLOR 0x006400;
 
@@ -98,6 +100,8 @@ t_map			*load_map(char *path);
 ** movement.c
 */
 
+int				keydown_handler(int key, t_map *map);
+int				keyup_handler(int key, t_map *map);
 void			move(t_map *map, int dir);
 void			turn(t_pos *pos, int dir);
 

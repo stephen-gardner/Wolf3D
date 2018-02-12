@@ -6,14 +6,44 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 22:33:42 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/12 04:05:20 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/12 09:02:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "wolf3d.h"
 
-#define ROT 0.0225
-#define MOV 0.0375
+int		keydown_handler(int key, t_map *map)
+{
+	if (key == K_SP)
+		map->keys[0] = TRUE;
+	else if (key == K_W || key == K_UP)
+		map->keys[1] = TRUE;
+	else if (key == K_S || key == K_DN)
+		map->keys[2] = TRUE;
+	else if (key == K_A || key == K_LT)
+		map->keys[3] = TRUE;
+	else if (key == K_D || key == K_RT)
+		map->keys[4] = TRUE;
+	else if (key == K_ESC)
+		exit(0);
+	return (0);
+}
+
+int		keyup_handler(int key, t_map *map)
+{
+	if (key == K_SP)
+		map->keys[0] = FALSE;
+	else if (key == K_W || key == K_UP)
+		map->keys[1] = FALSE;
+	else if (key == K_S || key == K_DN)
+		map->keys[2] = FALSE;
+	else if (key == K_A || key == K_LT)
+		map->keys[3] = FALSE;
+	else if (key == K_D || key == K_RT)
+		map->keys[4] = FALSE;
+	return (0);
+}
 
 void	move(t_map *map, int dir)
 {

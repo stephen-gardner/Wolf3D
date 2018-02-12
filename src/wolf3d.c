@@ -6,13 +6,20 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 21:07:24 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/12 08:42:55 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/12 09:05:49 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "mlx.h"
 #include "wolf3d.h"
+
+static int	close_window(t_map *map)
+{
+	UNUSED(map);
+	exit(0);
+	return (0);
+}
 
 static void	init_canvas(t_canvas *cvs, int width, int height)
 {
@@ -26,39 +33,7 @@ static void	init_canvas(t_canvas *cvs, int width, int height)
 		DEFAULT_ERROR;
 }
 
-static int	keydown_handler(int key, t_map *map)
-{
-	if (key == K_SP)
-		map->keys[0] = TRUE;
-	else if (key == K_W || key == K_UP)
-		map->keys[1] = TRUE;
-	else if (key == K_S || key == K_DN)
-		map->keys[2] = TRUE;
-	else if (key == K_A || key == K_LT)
-		map->keys[3] = TRUE;
-	else if (key == K_D || key == K_RT)
-		map->keys[4] = TRUE;
-	else if (key == K_ESC)
-		exit(0);
-	return (0);
-}
-
-static int	keyup_handler(int key, t_map *map)
-{
-	if (key == K_SP)
-		map->keys[0] = FALSE;
-	else if (key == K_W || key == K_UP)
-		map->keys[1] = FALSE;
-	else if (key == K_S || key == K_DN)
-		map->keys[2] = FALSE;
-	else if (key == K_A || key == K_LT)
-		map->keys[3] = FALSE;
-	else if (key == K_D || key == K_RT)
-		map->keys[4] = FALSE;
-	return (0);
-}
-
-static int	render(t_map *map)
+static int	game_loop(t_map *map)
 {
 	if (map->keys[1])
 		move(map, 1);
@@ -88,8 +63,9 @@ int			main(int ac, char **av)
 	map->pos->plane_x = 0;
 	map->pos->plane_y = 0.66;
 	mlx_hook(map->cvs->win, 2, 1, &keydown_handler, map);
+	mlx_hook(map->cvs->win, 17, 1, &close_window, map);
 	mlx_key_hook(map->cvs->win, &keyup_handler, map);
-	mlx_loop_hook(map->cvs->mlx, &render, map);
+	mlx_loop_hook(map->cvs->mlx, &game_loop, map);
 	mlx_loop(map->cvs->mlx);
 	return (0);
 }
