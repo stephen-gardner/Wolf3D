@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 19:44:47 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/12 09:23:49 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/14 00:01:40 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,25 @@
 # include <math.h>
 # include "libft.h"
 
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
 # define ROT 0.0225
 # define MOV 0.0375
+
 # define CEIL_COLOR 0xE5E5FF;
 # define GRND_COLOR 0x006400;
 
 # define FATAL_ERROR(msg) fatal_error(msg)
 # define DEFAULT_ERROR FATAL_ERROR(strerror(errno))
 # define MAP_ERROR FATAL_ERROR("Map error")
+# define USAGE FATAL_ERROR("usage: wolf3d <map-filename> [-n]")
 
 typedef enum	e_keys
 {
 	K_A = 0,
 	K_S = 1,
 	K_D = 2,
+	K_Z = 6,
 	K_W = 13,
 	K_SP = 49,
 	K_ESC = 53,
@@ -86,17 +91,20 @@ typedef struct	s_pos
 	double		loc_y;
 	double		plane_x;
 	double		plane_y;
+	int			mod_z;
 }				t_pos;
 
 typedef struct	s_map
 {
 	t_canvas	*cvs;
 	t_pos		*pos;
-	t_bool		keys[5];
+	t_bool		keys[7];
+	t_bool		club;
 	int			**arr;
 	int			*raw;
 	int			x_max;
 	int			y_max;
+	int			mod;
 }				t_map;
 
 /*
@@ -111,6 +119,7 @@ t_map			*load_map(char *path);
 
 int				keydown_handler(int key, t_map *map);
 int				keyup_handler(int key, t_map *map);
+void			look(t_pos *pos, int dir);
 void			move(t_map *map, int dir);
 void			turn(t_pos *pos, int dir);
 
@@ -125,6 +134,6 @@ void			raycast(t_map *map);
 */
 
 void			fatal_error(char *msg);
-int				get_color(t_raycast *rc, int y);
+int				get_color(t_raycast *rc, int y, int mod);
 char			**split(char *arg);
 #endif

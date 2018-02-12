@@ -14,6 +14,7 @@ SRC = \
 	ft_memcpy\
 	ft_memdel\
 	ft_memset\
+	ft_strcmp\
 	ft_stpcpy\
 	ft_strlen\
 	ft_strsub\

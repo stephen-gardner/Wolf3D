@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 22:18:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/12 09:30:41 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/14 00:01:04 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,28 @@ void		fatal_error(char *msg)
 	exit(1);
 }
 
-int			get_color(t_raycast *rc, int y)
+int			get_color(t_raycast *rc, int y, int mod)
 {
 	if (rc->face == NORTH)
 	{
 		if (y % 5)
 			return (0);
-		return (0xFFFF00);
+		return (0xFFFF00 >> (mod % 70));
 	}
 	else if (rc->face == SOUTH)
 	{
 		if (rc->x % 5)
 			return (0);
-		return (0x00FF00);
+		return (0x00FF00 << (mod % 60));
 	}
 	else if (rc->face == EAST)
 	{
-		if (y % 5 || rc->x % 10)
+		if (y % 5 || rc->x % 5)
 			return (0);
-		return (0xFFFFFF);
+		return (0xFFFFFF >> (mod % 50));
 	}
 	else
-		return (0xFF0000);
+		return (((0xFF0000 << (rc->x % 5)) >> (y % 2)) << (mod % 40));
 }
 
 static int	count_args(char *arg)

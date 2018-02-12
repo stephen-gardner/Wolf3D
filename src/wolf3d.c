@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 21:07:24 by sgardner          #+#    #+#             */
-/*   Updated: 2018/02/12 09:05:49 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:16:00 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ static int	game_loop(t_map *map)
 		turn(map->pos, 1);
 	else if (map->keys[4])
 		turn(map->pos, -1);
+	if (map->keys[5])
+		look(map->pos, 1);
+	else if (map->keys[6])
+		look(map->pos, -1);
+	if (map->club && ++map->mod > 80)
+		map->mod = 0;
 	raycast(map);
 	mlx_put_image_to_window(map->cvs->mlx, map->cvs->win, map->cvs->img, 0, 0);
 	return (0);
@@ -52,16 +58,23 @@ int			main(int ac, char **av)
 {
 	t_map	*map;
 
-	if (ac != 2)
-		FATAL_ERROR("usage: wolf3d <map-filename>");
+	if (ac < 2 || ac > 3)
+		USAGE;
 	map = load_map(av[1]);
 	if (map->arr[(int)map->pos->loc_y][(int)map->pos->loc_x] > 0)
 		MAP_ERROR;
-	init_canvas(map->cvs, 1920, 1080);
+	init_canvas(map->cvs, WIN_WIDTH, WIN_HEIGHT);
 	map->pos->dir_x = -1;
 	map->pos->dir_y = 0;
 	map->pos->plane_x = 0;
 	map->pos->plane_y = 0.66;
+	if (ac > 2)
+	{
+		if (!ft_strcmp(av[2], "-n"))
+			map->club = TRUE;
+		else
+			USAGE;
+	}
 	mlx_hook(map->cvs->win, 2, 1, &keydown_handler, map);
 	mlx_hook(map->cvs->win, 17, 1, &close_window, map);
 	mlx_key_hook(map->cvs->win, &keyup_handler, map);
